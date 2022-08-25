@@ -1,5 +1,121 @@
 @charset "UTF-8";
 
+:root {
+    --primary-color: #dc3822;
+    --dark-grey: #1d242d;
+    --grey: #32373c;
+    --light-grey: #8c8989;
+    --lighter-grey: #bfbfbf;
+    --lg: 800px;
+}
+
+html {
+    font-size: 10px;
+    margin: 0;
+}
+
 body {
-    
+    margin: 0;
+    font-size: 1.6rem;
+    font-family: NonBreakingSpaceOverride, "Hoefler Text", Garamond, "Times New Roman", serif;
+    line-height: 1.5;
+
+    color: var(--grey);
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 4.8rem;
+    font-weight: bold;
+    color: var(--dark-grey);
+}
+
+img {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    color: var(--primary-color);
+}
+
+button {
+    border: none;
+}
+
+/* Composition */
+
+.container {
+    max-width: var(--lg);
+    width: 80%;
+    margin: 0 auto;
+}
+
+.two-col {
+    display: flex;
+}
+
+.two-col > * {
+    width: 50%;
+}
+
+.wrapper {
+    flex: 1;
+}
+
+/* Utilities */
+
+.bg-dark-grey {
+    background-color: var(--dark-grey);
+}
+
+.light-grey {
+    color: var(--light-grey);
+}
+
+.lighter-grey {
+    color: var(--lighter-grey);
+}
+
+.button-primary {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 1em 2em;
+}
+
+.button-primary:hover, .button-primary:focus {
+    text-decoration: underline;
+}
+
+/* Blocks */
+
+.header {
+    color: var(--primary-color);
+
+    padding: 2rem 0;
+    margin-bottom: 8rem;
+}
+
+.footer {
+    font-size: 1.2rem;
+    padding: 40px 0;
+}
+
+.logo {
+    width: 148px;
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
