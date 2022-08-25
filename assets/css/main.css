@@ -55,10 +55,11 @@ h1 {
     font-weight: bold;
     color: var(--dark-grey);
     font-family: var(--font-sans);
+    margin-bottom: 4rem;
 }
 
 p {
-    margin-top: 2rem;
+    margin-bottom: 3rem;
 }
 
 img {
@@ -95,6 +96,7 @@ button {
 
 .wrapper {
     flex: 1;
+    margin-bottom: 4rem;
 }
 
 .center {

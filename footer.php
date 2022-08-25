@@ -9,7 +9,7 @@
         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
         All rights reserved
         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-       <a class="lighter-grey" href="privacy">Privacy Policy</a>
+       <a class="lighter-grey" href="privacy-policy">Privacy Policy</a>
     </div>
 </footer>
 

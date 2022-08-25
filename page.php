@@ -2,19 +2,10 @@
 
 <div class="container wrapper">
     <h1 class="section-title"><?php the_title() ?></h1>
-    <div class="content two-col">
-        <div>
-            <div class="content__text">
+    <div class="content__text">
 
-                <?php the_content() ?>
+        <?php the_content() ?>
 
-            </div>
-        </div>
-        <div class="center">
-            <button class="button-primary">
-                Create a campaign site
-            </button>
-        </div>
     </div>
 </div>
 
