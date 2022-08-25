@@ -8,9 +8,9 @@
 
         </div>
         <div class="center">
-            <button class="button-primary">
+            <a class="button bg-primary" href="wp-signup.php">
                 Create a campaign site
-            </button>
+            </a>
         </div>
     </div>
 
