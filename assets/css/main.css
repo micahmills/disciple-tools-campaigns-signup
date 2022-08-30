@@ -43,7 +43,7 @@ body {
     font-family: var(--font-serif);
     line-height: 1.5;
 
-    color: var(--grey);
+    color: var(--light-grey);
 
     display: flex;
     flex-direction: column;
@@ -58,8 +58,16 @@ h1 {
     margin-bottom: 4rem;
 }
 
-p {
+h2 {
+    font-size: 3.2rem;
+    font-weight: 600;
+    color: var(--dark-grey);
+    font-family: var(--font-sans);
     margin-bottom: 3rem;
+}
+
+p {
+    margin: 3rem 0;
 }
 
 img {
@@ -126,6 +134,7 @@ button {
     color: var(--lighter-grey);
 }
 
+#signup-content .mu_register input[name="submit"],
 .button {
     font-size: 1.7rem;
     font-weight: 600;
@@ -135,9 +144,17 @@ button {
     padding: 1em 2em;
 }
 
+#signup-content .mu_register input[name="submit"]:hover,
+#signup-content .mu_register input[name="submit"]:focus,
 .button:hover, .button:focus {
     text-decoration: underline;
     color: white;
+}
+
+#signup-content .mu_register input[type="text"] {
+    width: 100%;
+    font-size: 24px;
+    margin: 5px 0;
 }
 
 /* Blocks */
@@ -160,4 +177,15 @@ button {
 
 .content__text {
     font-size: 2.1rem;
+}
+
+/* org-multisite-config overrides */
+
+#signup-content .mu_register {
+    margin: 0!important;
+    width: 100%!important;
+}
+
+ {
+
 }
