@@ -43,7 +43,7 @@ body {
     font-family: var(--font-serif);
     line-height: 1.5;
 
-    color: var(--grey);
+    color: var(--light-grey);
 
     display: flex;
     flex-direction: column;
@@ -58,8 +58,16 @@ h1 {
     margin-bottom: 4rem;
 }
 
-p {
+h2 {
+    font-size: 3.2rem;
+    font-weight: 600;
+    color: var(--dark-grey);
+    font-family: var(--font-sans);
     margin-bottom: 3rem;
+}
+
+p {
+    margin: 3rem 0;
 }
 
 img {
@@ -68,6 +76,7 @@ img {
 
 a {
     text-decoration: none;
+    color: var(--dark-grey);
 }
 
 a:hover, a:focus {
@@ -103,9 +112,16 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 /* Utilities */
+
+#signup-content .mu_register input[name="submit"],
+.bg-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
 
 .bg-dark-grey {
     background-color: var(--dark-grey);
@@ -119,17 +135,30 @@ button {
     color: var(--lighter-grey);
 }
 
-.button-primary {
-    background-color: var(--primary-color);
-    color: white;
+#signup-content .mu_register input[name="submit"],
+.button {
     font-size: 1.7rem;
-    font-weight: bold;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     padding: 1em 2em;
+    border: none;
+    cursor: pointer;
+    width: unset;
 }
 
-.button-primary:hover, .button-primary:focus {
+#signup-content .mu_register input[name="submit"]:hover,
+#signup-content .mu_register input[name="submit"]:focus,
+.button:hover, .button:focus {
     text-decoration: underline;
+    color: white;
+}
+
+#signup-content .mu_register input[type="text"] {
+    width: 100%;
+    font-size: 24px;
+    margin: 5px 0;
 }
 
 /* Blocks */
@@ -151,5 +180,28 @@ button {
 }
 
 .content__text {
-    font-size: 2.1rem;
+    font-size: 1.8rem;
+}
+
+#signup-content .mu_register {
+    margin: 0!important;
+    width: 100%!important;
+}
+
+#signup-content input#signupuser {
+    display: none;
+}
+
+#signup-content label[for=signupuser] {
+    display: none;
+    font-size: 0;
+}
+
+#signup-content input#signupblog {
+    display: none;
+}
+
+#signup-content label[for=signupblog] {
+    display: none;
+    font-size: 0;
 }
