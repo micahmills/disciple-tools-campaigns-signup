@@ -152,3 +152,47 @@ function dt_removed_mailchimp_tag( $old_site ) {
     }
 
 }
+
+
+
+/**
+ * Fires before the site Sign-up form.
+ *
+ */
+add_action( 'before_signup_form', function() : void {
+    global $domain, $dt_old_domain;
+
+    $dt_old_domain = $domain;
+
+    $needle = "campaigns.";
+
+    if ( stripos( $domain, $needle ) === 0 ) {
+        //phpcs:ignore
+        $domain = substr( $domain, strlen( $needle ) );
+    }
+} );
+
+/**
+ * Fires after a network is retrieved.
+ *
+ * @param \WP_Network $_network Network data.
+ * @return \WP_Network Network data.
+ */
+add_filter( 'get_network', function( \WP_Network $_network ) : \WP_Network {
+    global $domain;
+    if ( isset( $_SERVER["REQUEST_URI"] ) && $_SERVER["REQUEST_URI"] === "/wp-signup.php" ) {
+        $_network->domain = $domain;
+    }
+    return $_network;
+} );
+
+/**
+ * Fires when the site or user sign-up process is complete.
+ *
+ */
+add_action( 'after_signup_form', function() : void {
+    global $domain, $dt_old_domain;
+
+    //phpcs:ignore
+    $domain = $dt_old_domain;
+} );
