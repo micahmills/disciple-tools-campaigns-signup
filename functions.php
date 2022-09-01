@@ -163,27 +163,16 @@ function dt_removed_mailchimp_tag( $old_site ) {
  */
 add_filter( 'wpmu_validate_blog_signup', function( array $result ) : array {
 
-    $key_words = [
-        "viagra",
-        "invest",
-        "trade",
-        "medicine",
-        "pharmacy",
-        "pharmaceutical",
-        "breast",
-        "penis",
-        "dating",
-        "singles",
-        "girl",
-        "bitcoin",
-    ];
+    require_once( 'bad-words.php' );
+
+    $bad_words = dt_get_bad_words();
 
     /* check domain, blogname and blog title for key words */
-    foreach ( $key_words as $key_word ) {
+    foreach ( $bad_words as $key_word ) {
         if ( strpos( $result["domain"], $key_word ) !== false ||
         strpos( $result["blog_title"], $key_word ) !== false ||
         strpos( $result["blogname"], $key_word ) !== false ) {
-            $result["errors"] = new WP_Error( "unexpected_key_word", "There is an unexpected keyword in the domain or" );
+            $result["errors"] = new WP_Error( "unexpected_key_word", "There is a banned keyword in the domain or blog title" );
         }
     }
 
