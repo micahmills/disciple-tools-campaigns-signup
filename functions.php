@@ -1,4 +1,5 @@
 <?php
+use PHP_CodeSniffer\Tests\Core\Filters\Filter\AcceptTest;
 
 /* Register styles */
 
@@ -79,6 +80,29 @@ function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
         $tags[] = "dt_newsletter";
     }
     add_user_to_mailchimp( $user_id, $tags );
+
+    $token = get_option( "crm_link_token" );
+    $domain = get_option( "crm_link_domain" );
+
+    if ( !$token || !$domain ) {
+        error_log( "token or domain missing in the DB at crm_link_token or crm_link_domain" );
+        return;
+    }
+
+    $site_key = md5( $token . $domain . get_site()->domain );
+    $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+    $email = "jonesy@dads.army";
+    $fields = [];
+    $args = [
+        'method' => 'POST',
+        'body' => $fields,
+        'headers' => [
+            'Authorization' => 'Bearer ' . $transfer_token,
+        ],
+    ];
+    $response = wp_remote_post( 'https://example.disciple.tools/wp-json/dt-demo/v1/contact/import?email=' . $email, $args );
+
+    error_log( "Made it past the remote post" );
 
     return;
 }
