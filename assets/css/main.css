@@ -43,7 +43,7 @@ body {
     font-family: var(--font-serif);
     line-height: 1.5;
 
-    color: var(--light-grey);
+    color: var(--grey);
 
     display: flex;
     flex-direction: column;
@@ -76,7 +76,7 @@ img {
 
 a {
     text-decoration: none;
-    color: var(--dark-grey);
+    color: var(--light-grey);
 }
 
 a:hover, a:focus {
@@ -167,7 +167,7 @@ button {
     color: var(--primary-color);
 
     padding: 2rem 0;
-    margin-bottom: 8rem;
+    margin-bottom: 6rem;
 }
 
 .footer {
