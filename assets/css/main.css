@@ -124,10 +124,6 @@ button {
     color: white;
 }
 
-.submit {
-    margin-top: -6rem;
-}
-
 .bg-dark-grey {
     background-color: var(--dark-grey);
 }
@@ -151,6 +147,20 @@ button {
     border: none;
     cursor: pointer;
     width: unset;
+}
+
+#signup-content .mu_register label {
+    font-size: 1.8rem;
+}
+
+#signup-content label.checkbox {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#signup-content .mu_register label > * + * {
+    margin-left: 10px;
 }
 
 #signup-content .mu_register input[name="submit"]:hover,
@@ -197,16 +207,6 @@ button {
 
 #signup-content .suffix_address {
     font-size: 1.8rem;
-}
-
-#signup-content .mu_register label {
-    font-size: 1.8rem;
-    display: inline-flex;
-    align-items: center;
-    margin-right: 10px;
-}
-#signup-content .mu_register label > * + * {
-    margin-left: 10px;
 }
 
 #signup-content input#signupuser {
