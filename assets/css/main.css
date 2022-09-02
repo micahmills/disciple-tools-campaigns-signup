@@ -68,6 +68,7 @@ h2 {
 
 p {
     margin: 3rem 0;
+    font-size: 1.8rem;
 }
 
 img {
@@ -155,12 +156,18 @@ button {
     color: white;
 }
 
-#signup-content .mu_register input[type="text"] {
+#signup-content .mu_register input[type="text"],
+#signup-content .mu_register input[type="email"] {
     width: 100%;
-    font-size: 24px;
+    font-size: 2.4rem;
     margin: 5px 0;
 }
 
+#signup-content .mu_register input[type="checkbox"],
+#signup-content .mu_register input[type="radio"] {
+    width: 1.8rem;
+    height: 1.8rem;
+}
 /* Blocks */
 
 .header {
@@ -179,13 +186,23 @@ button {
     width: 148px;
 }
 
-.content__text {
-    font-size: 1.8rem;
-}
-
 #signup-content .mu_register {
     margin: 0!important;
     width: 100%!important;
+}
+
+#signup-content .suffix_address {
+    font-size: 1.8rem;
+}
+
+#signup-content .mu_register label {
+    font-size: 1.8rem;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+}
+#signup-content .mu_register label > * + * {
+    margin-left: 10px;
 }
 
 #signup-content input#signupuser {
@@ -204,4 +221,42 @@ button {
 #signup-content label[for=signupblog] {
     display: none;
     font-size: 0;
+}
+
+@media ( max-width: 1000px ) {
+    html {
+        font-size: 20px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+    }
+
+    .container {
+        width: unset;
+        max-width: unset;
+        margin: 0 1em;
+    }
+
+    .header {
+        margin-bottom: 0;
+    }
+
+    .logo {
+        width: 300px;
+    }
+
+    .two-col {
+        flex-direction: column-reverse;
+    }
+
+    .two-col > * {
+        width: 100%;
+    }
+
+    .button {
+        width: 100%;
+        padding: 1em 0;
+        text-align: center;
+    }
 }
