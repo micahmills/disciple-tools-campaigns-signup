@@ -33,8 +33,12 @@ add_action( 'signup_blogform', function ( $errors ){
 
     wp_nonce_field( 'dt_extra_meta_info', 'dt_signup_blogform' );
     ?>
+  <label for="dt_champion_name">
+    What is your name?
+  </label>
+  <input type="text" id="dt_champion_name" name="dt_champion_name">
   <label for="dt_prayer_site">
-    What is the URL of your prayer website (if you have one)
+    Do you have an existing prayer website? What is the link?
   </label>
   <input type="text" id="dt_prayer_site" name="dt_prayer_site">
   <label for="dt_reason_for_subsite">
@@ -61,6 +65,9 @@ function dt_add_signup_meta( $meta ){
 
     if ( isset( $_POST["dt_newsletter"] ) ){
         $meta["dt_newsletter"] = 1;
+    }
+    if ( isset( $_POST["dt_champion_name"] ) ) {
+        $meta["dt_champion_name"] = sanitize_text_field( wp_unslash( $_POST["dt_champion_name"] ) );
     }
     if ( isset( $_POST["dt_prayer_site"] ) ) {
         $meta["dt_prayer_site"] = sanitize_text_field( wp_unslash( $_POST["dt_prayer_site"] ) );
