@@ -124,6 +124,10 @@ button {
     color: white;
 }
 
+.submit {
+    margin-top: -6rem;
+}
+
 .bg-dark-grey {
     background-color: var(--dark-grey);
 }
@@ -223,13 +227,19 @@ button {
     font-size: 0;
 }
 
-@media ( max-width: 1000px ) {
+@media (max-width: 700px ) {
     html {
-        font-size: 20px;
+        font-size: 10px;
     }
 
     h1, h2, h3, h4, h5, h6 {
         text-align: center;
+    }
+
+    h1 {
+        font-size: 4rem;
+        margin: 0;
+        margin-bottom: 2rem;
     }
 
     .container {
@@ -240,10 +250,6 @@ button {
 
     .header {
         margin-bottom: 0;
-    }
-
-    .logo {
-        width: 300px;
     }
 
     .two-col {

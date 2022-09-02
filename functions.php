@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Prints scripts or data in the head tag on the front end.
+ *
+ */
+add_action( 'wp_head', function() : void {
+    ?>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php
+} );
+
 /* Register styles */
 
 add_action( 'wp_enqueue_scripts', function() {
