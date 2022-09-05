@@ -43,7 +43,7 @@ body {
     font-family: var(--font-serif);
     line-height: 1.5;
 
-    color: var(--light-grey);
+    color: var(--grey);
 
     display: flex;
     flex-direction: column;
@@ -68,6 +68,7 @@ h2 {
 
 p {
     margin: 3rem 0;
+    font-size: 1.8rem;
 }
 
 img {
@@ -76,7 +77,7 @@ img {
 
 a {
     text-decoration: none;
-    color: var(--dark-grey);
+    color: var(--light-grey);
 }
 
 a:hover, a:focus {
@@ -148,6 +149,20 @@ button {
     width: unset;
 }
 
+#signup-content .mu_register label {
+    font-size: 1.8rem;
+}
+
+#signup-content label.checkbox {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#signup-content .mu_register label > * + * {
+    margin-left: 10px;
+}
+
 #signup-content .mu_register input[name="submit"]:hover,
 #signup-content .mu_register input[name="submit"]:focus,
 .button:hover, .button:focus {
@@ -155,19 +170,25 @@ button {
     color: white;
 }
 
-#signup-content .mu_register input[type="text"] {
+#signup-content .mu_register input[type="text"],
+#signup-content .mu_register input[type="email"] {
     width: 100%;
-    font-size: 24px;
+    font-size: 2.4rem;
     margin: 5px 0;
 }
 
+#signup-content .mu_register input[type="checkbox"],
+#signup-content .mu_register input[type="radio"] {
+    width: 1.8rem;
+    height: 1.8rem;
+}
 /* Blocks */
 
 .header {
     color: var(--primary-color);
 
     padding: 2rem 0;
-    margin-bottom: 8rem;
+    margin-bottom: 6rem;
 }
 
 .footer {
@@ -179,13 +200,13 @@ button {
     width: 148px;
 }
 
-.content__text {
-    font-size: 1.8rem;
-}
-
 #signup-content .mu_register {
     margin: 0!important;
     width: 100%!important;
+}
+
+#signup-content .suffix_address {
+    font-size: 1.8rem;
 }
 
 #signup-content input#signupuser {
@@ -204,4 +225,44 @@ button {
 #signup-content label[for=signupblog] {
     display: none;
     font-size: 0;
+}
+
+@media (max-width: 700px ) {
+    html {
+        font-size: 10px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 4rem;
+        margin: 0;
+        margin-bottom: 2rem;
+    }
+
+    .container {
+        width: unset;
+        max-width: unset;
+        margin: 0 1em;
+    }
+
+    .header {
+        margin-bottom: 0;
+    }
+
+    .two-col {
+        flex-direction: column-reverse;
+    }
+
+    .two-col > * {
+        width: 100%;
+    }
+
+    .button {
+        width: 100%;
+        padding: 1em 0;
+        text-align: center;
+    }
 }

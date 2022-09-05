@@ -1,12 +1,26 @@
 <?php
 use PHP_CodeSniffer\Tests\Core\Filters\Filter\AcceptTest;
 
+/**
+ * Prints scripts or data in the head tag on the front end.
+ *
+ */
+add_action( 'wp_head', function() : void {
+    ?>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php
+} );
+
 /* Register styles */
 
 add_action( 'wp_enqueue_scripts', function() {
 
-    wp_enqueue_style( 'reset', trailingslashit( get_template_directory_uri() ) . 'assets/css/reset.css', [], filemtime( trailingslashit( get_template_directory() ) . 'assets/css/reset.css' ) );
-    wp_enqueue_style( 'main', trailingslashit( get_template_directory_uri() ) . 'assets/css/main.css', [ 'reset' ], filemtime( trailingslashit( get_template_directory() ) . 'assets/css/main.css' ) );
+
+    wp_enqueue_style( 'reset', trailingslashit( get_template_directory_uri() ) . 'assets/css/reset.css', [ 'normalize' ], filemtime( trailingslashit( get_template_directory() ) . 'assets/css/reset.css' ) );
+    wp_enqueue_style( 'normalize', trailingslashit( get_template_directory_uri() ) . 'assets/css/normalize.css', [], filemtime( trailingslashit( get_template_directory() ) . 'assets/css/normalize.css' ) );
+    wp_enqueue_style( 'main', trailingslashit( get_template_directory_uri() ) . 'assets/css/main.css', [ 'normalize', 'reset' ], filemtime( trailingslashit( get_template_directory() ) . 'assets/css/main.css' ) );
 
 } );
 
@@ -32,8 +46,12 @@ add_action( 'signup_blogform', function ( $errors ){
 
     wp_nonce_field( 'dt_extra_meta_info', 'dt_signup_blogform' );
     ?>
+  <label for="dt_champion_name">
+    What is your name?
+  </label>
+  <input type="text" id="dt_champion_name" name="dt_champion_name">
   <label for="dt_prayer_site">
-    What is the URL of your prayer website (if you have one)
+    Do you have an existing prayer website? What is the link?
   </label>
   <input type="text" id="dt_prayer_site" name="dt_prayer_site">
   <label for="dt_reason_for_subsite">
@@ -60,6 +78,9 @@ function dt_add_signup_meta( $meta ){
 
     if ( isset( $_POST["dt_newsletter"] ) ){
         $meta["dt_newsletter"] = 1;
+    }
+    if ( isset( $_POST["dt_champion_name"] ) ) {
+        $meta["dt_champion_name"] = sanitize_text_field( wp_unslash( $_POST["dt_champion_name"] ) );
     }
     if ( isset( $_POST["dt_prayer_site"] ) ) {
         $meta["dt_prayer_site"] = sanitize_text_field( wp_unslash( $_POST["dt_prayer_site"] ) );
