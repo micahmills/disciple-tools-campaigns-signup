@@ -123,11 +123,18 @@ function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
         return;
     }
 
+    if ( !$blog_id ) {
+        $blog_id = get_current_blog_id();
+    }
+
+    $blog = get_blog_details( $blog_id );
+
     $email = $user->user_email;
     $fields = [
         "user_info" => [
             "name" => $meta["dt_champion_name"],
-        ]
+        ],
+        "demo_or_site_links" => $blog->domain,
     ];
     $args = [
         'method' => 'POST',
