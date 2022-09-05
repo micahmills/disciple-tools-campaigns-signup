@@ -92,9 +92,17 @@ function dt_add_signup_meta( $meta ){
     return $meta;
 }
 
-// add extra fields to user profile when user is activated
-add_action( 'wpmu_activate_blog', 'dt_pcsu_activate_blog', 10, 5 );
-function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
+/**
+ * Fires when a site's initialization routine should be executed.
+ *
+ * @param \WP_Site $new_site New site object.
+ * @param array    $args     Arguments for the initialization.
+ */
+add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : void {
+    $domain = $new_site->domain;
+    $blog_id = $new_site->blog_id;
+    $user_id = $args["user_id"];
+    $meta = $args["options"];
 
     $tags = [ "campaigns_creator" ];
     if ( isset( $meta["dt_newsletter"] ) ){
@@ -148,7 +156,8 @@ function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
     $response = wp_remote_post( 'http://' . $domain . '/wp-json/dt-campaign/v1/contact/import?email=' . urlencode( $email ), $args );
 
     return;
-}
+
+}, 10, 2 );
 
 function add_user_to_mailchimp( $user_id, $tags = [] ){
     if ( !$user_id ){
