@@ -96,7 +96,7 @@ function dt_add_signup_meta( $meta ){
 add_action( 'wpmu_activate_blog', 'dt_pcsu_activate_blog', 10, 5 );
 function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
 
-    $tags = [ "demo_creator" ];
+    $tags = [ "campaigns_creator" ];
     if ( isset( $meta["dt_newsletter"] ) ){
         $tags[] = "dt_newsletter";
     }
@@ -112,8 +112,23 @@ function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
 
     $site_key = md5( $token . $domain . get_site()->domain );
     $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
-    $email = "jonesy@dads.army";
-    $fields = [];
+
+    if ( !$user_id ) {
+        $user_id = get_current_user_id();
+    }
+
+    $user = get_user_by( "ID", $user_id );
+
+    if ( !$user ) {
+        return;
+    }
+
+    $email = $user->user_email;
+    $fields = [
+        "user_info" => [
+            "name" => $meta["dt_champion_name"],
+        ]
+    ];
     $args = [
         'method' => 'POST',
         'body' => $fields,
@@ -121,9 +136,7 @@ function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
             'Authorization' => 'Bearer ' . $transfer_token,
         ],
     ];
-    $response = wp_remote_post( 'https://example.disciple.tools/wp-json/dt-demo/v1/contact/import?email=' . $email, $args );
-
-    error_log( "Made it past the remote post" );
+    $response = wp_remote_post( 'http://' . $domain . '/wp-json/dt-campaign/v1/contact/import?email=' . urlencode( $email ), $args );
 
     return;
 }
