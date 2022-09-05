@@ -134,7 +134,7 @@ function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
         "user_info" => [
             "name" => $meta["dt_champion_name"],
         ],
-        "demo_or_site_links" => $blog->domain,
+        "instance_links" => $blog->domain,
         "dt_prayer_site" => $meta["dt_prayer_site"],
         "dt_reason_for_subsite" => $meta["dt_reason_for_subsite"],
     ];
