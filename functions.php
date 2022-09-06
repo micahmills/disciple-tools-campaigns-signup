@@ -1,4 +1,5 @@
 <?php
+use PHP_CodeSniffer\Tests\Core\Filters\Filter\AcceptTest;
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -91,18 +92,72 @@ function dt_add_signup_meta( $meta ){
     return $meta;
 }
 
-// add extra fields to user profile when user is activated
-add_action( 'wpmu_activate_blog', 'dt_pcsu_activate_blog', 10, 5 );
-function dt_pcsu_activate_blog( $blog_id, $user_id, $password, $title, $meta ){
+/**
+ * Fires when a site's initialization routine should be executed.
+ *
+ * @param \WP_Site $new_site New site object.
+ * @param array    $args     Arguments for the initialization.
+ */
+add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : void {
+    $domain = $new_site->domain;
+    $blog_id = $new_site->blog_id;
+    $user_id = $args["user_id"];
+    $meta = $args["options"];
 
-    $tags = [ "demo_creator" ];
+    $tags = [ "campaigns_creator" ];
     if ( isset( $meta["dt_newsletter"] ) ){
         $tags[] = "dt_newsletter";
     }
     add_user_to_mailchimp( $user_id, $tags );
 
+    $token = get_option( "crm_link_token" );
+    $domain = get_option( "crm_link_domain" );
+
+    if ( !$token || !$domain ) {
+        error_log( "token or domain missing in the DB at crm_link_token or crm_link_domain" );
+        return;
+    }
+
+    $site_key = md5( $token . $domain . get_site()->domain );
+    $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+
+    if ( !$user_id ) {
+        $user_id = get_current_user_id();
+    }
+
+    $user = get_user_by( "ID", $user_id );
+
+    if ( !$user ) {
+        return;
+    }
+
+    if ( !$blog_id ) {
+        $blog_id = get_current_blog_id();
+    }
+
+    $blog = get_blog_details( $blog_id );
+
+    $email = $user->user_email;
+    $fields = [
+        "user_info" => [
+            "name" => $meta["dt_champion_name"],
+        ],
+        "instance_links" => $blog->domain,
+        "dt_prayer_site" => $meta["dt_prayer_site"],
+        "dt_reason_for_subsite" => $meta["dt_reason_for_subsite"],
+    ];
+    $args = [
+        'method' => 'POST',
+        'body' => $fields,
+        'headers' => [
+            'Authorization' => 'Bearer ' . $transfer_token,
+        ],
+    ];
+    $response = wp_remote_post( 'http://' . $domain . '/wp-json/dt-campaign/v1/contact/import?email=' . urlencode( $email ), $args );
+
     return;
-}
+
+}, 10, 2 );
 
 function add_user_to_mailchimp( $user_id, $tags = [] ){
     if ( !$user_id ){
