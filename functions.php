@@ -229,7 +229,31 @@ function dt_removed_mailchimp_tag( $old_site ) {
 
 }
 
+/**
+ * Filters site details and error messages following registration.
+ *
+ * @param array $result { Array of domain, path, blog name, blog title, user and error messages. @type string         $domain     Domain for the site. @type string         $path       Path for the site. Used in subdirectory installations. @type string         $blogname   The unique site name (slug). @type string         $blog_title Blog title. @type string|WP_User $user       By default, an empty string. A user object if provided. @type WP_Error       $errors     WP_Error containing any errors found.
+}
+ * @return array { Array of domain, path, blog name, blog title, user and error messages. @type string         $domain     Domain for the site. @type string         $path       Path for the site. Used in subdirectory installations. @type string         $blogname   The unique site name (slug). @type string         $blog_title Blog title. @type string|WP_User $user       By default, an empty string. A user object if provided. @type WP_Error       $errors     WP_Error containing any errors found.
+}
+ */
+add_filter( 'wpmu_validate_blog_signup', function( array $result ) : array {
 
+    require_once( 'bad-words.php' );
+
+    $bad_words = dt_get_bad_words();
+
+    /* check domain, blogname and blog title for key words */
+    foreach ( $bad_words as $key_word ) {
+        if ( strpos( $result["domain"], $key_word ) !== false ||
+        strpos( $result["blog_title"], $key_word ) !== false ||
+        strpos( $result["blogname"], $key_word ) !== false ) {
+            $result["errors"] = new WP_Error( "unexpected_key_word", "There is a banned keyword in the domain or blog title" );
+        }
+    }
+
+    return $result;
+}  );
 
 /**
  * Fires before the site Sign-up form.
