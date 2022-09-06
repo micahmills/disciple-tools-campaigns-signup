@@ -76,12 +76,12 @@ img {
 }
 
 a {
-    text-decoration: none;
-    color: var(--light-grey);
+    color: var(--primary-color);
+    text-decoration: underline;
 }
 
 a:hover, a:focus {
-    color: var(--primary-color);
+    text-decoration: none;
 }
 
 button {
@@ -143,6 +143,7 @@ button {
     font-family: var(--font-sans);
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    text-decoration: none;
     padding: 1em 2em;
     border: none;
     cursor: pointer;
