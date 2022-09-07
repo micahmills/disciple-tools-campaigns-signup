@@ -1,5 +1,8 @@
 <?php
-use PHP_CodeSniffer\Tests\Core\Filters\Filter\AcceptTest;
+
+global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
+$dt_campaign_signup_mailchimp_list_id = "4df6e5ea4e";
+$dt_campaign_signup_mailchimp_tag = "campaign_manager";
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -99,16 +102,16 @@ function dt_add_signup_meta( $meta ){
  * @param array    $args     Arguments for the initialization.
  */
 add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : void {
+    global $dt_campaign_signup_mailchimp_tag;
     $domain = $new_site->domain;
     $blog_id = $new_site->blog_id;
     $user_id = $args["user_id"];
     $meta = $args["options"];
 
-    $tags = [ "campaigns_creator" ];
     if ( isset( $meta["dt_newsletter"] ) ){
-        $tags[] = "dt_newsletter";
+        $tags = [ $dt_campaign_signup_mailchimp_tag ];
+        add_user_to_mailchimp( $user_id, $tags );
     }
-    add_user_to_mailchimp( $user_id, $tags );
 
     $token = get_option( "crm_link_token" );
     $domain = get_option( "crm_link_domain" );
@@ -160,6 +163,8 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
 }, 10, 2 );
 
 function add_user_to_mailchimp( $user_id, $tags = [] ){
+    global $dt_campaign_signup_mailchimp_list_id;
+
     if ( !$user_id ){
         $user_id = get_current_user_id();
     }
@@ -169,7 +174,7 @@ function add_user_to_mailchimp( $user_id, $tags = [] ){
     $user = get_user_by( "ID", $user_id );
 
     if ( $user && $api_key ){
-        $url = "https://us14.api.mailchimp.com/3.0/lists/449bdb3570/members/";
+        $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/";
         $response = wp_remote_post( $url, [
             "body" => json_encode([
                 "email_address" => $user->user_email,
@@ -181,7 +186,7 @@ function add_user_to_mailchimp( $user_id, $tags = [] ){
                 "tags" => $tags
             ]),
             "headers" => [
-                "Authorization" => "tags $api_key",
+                "Authorization" => "Bearer $api_key",
                 'Content-Type' => 'application/json; charset=utf-8'
             ],
             'data_format' => 'body',
@@ -201,6 +206,7 @@ function add_user_to_mailchimp( $user_id, $tags = [] ){
  */
 add_action( 'wp_uninitialize_site', 'dt_removed_mailchimp_tag', 1, 1 );
 function dt_removed_mailchimp_tag( $old_site ) {
+    global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
 
     $api_key = get_site_option( "dt_mailchimp_api_key", null );
 
@@ -209,18 +215,18 @@ function dt_removed_mailchimp_tag( $old_site ) {
 
     if ( $admin_email && $api_key ){
         $email_hash = md5( strtolower( $admin_email ) );
-        $url = "https://us14.api.mailchimp.com/3.0/lists/449bdb3570/members/$email_hash/tags";
+        $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
         $response = wp_remote_post( $url, [
             "body" => json_encode( [
                 "tags" => [
                     [
-                        'name' => 'demo_creator',
+                        'name' => $dt_campaign_signup_mailchimp_tag,
                         'status' => 'inactive',
                     ],
                 ]
             ] ),
             "headers" => [
-                "Authorization" => "tags $api_key",
+                "Authorization" => "Bearer $api_key",
                 'Content-Type' => 'application/json; charset=utf-8'
             ],
             'data_format' => 'body',
