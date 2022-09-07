@@ -2,7 +2,7 @@
 
 global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
 $dt_campaign_signup_mailchimp_list_id = "4df6e5ea4e";
-$dt_campaign_signup_mailchimp_tag = "campaign_signup";
+$dt_campaign_signup_mailchimp_tag = "campaign_manager";
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -108,12 +108,10 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     $user_id = $args["user_id"];
     $meta = $args["options"];
 
-    global $dt_campaign_signup_mailchimp_tag;
-    $tags = [ $dt_campaign_signup_mailchimp_tag ];
     if ( isset( $meta["dt_newsletter"] ) ){
-        $tags[] = "dt_newsletter";
+        $tags = [ $dt_campaign_signup_mailchimp_tag ];
+        add_user_to_mailchimp( $user_id, $tags );
     }
-    add_user_to_mailchimp( $user_id, $tags );
 
     $token = get_option( "crm_link_token" );
     $domain = get_option( "crm_link_domain" );
@@ -188,7 +186,7 @@ function add_user_to_mailchimp( $user_id, $tags = [] ){
                 "tags" => $tags
             ]),
             "headers" => [
-                "Authorization" => "tags $api_key",
+                "Authorization" => "Bearer $api_key",
                 'Content-Type' => 'application/json; charset=utf-8'
             ],
             'data_format' => 'body',
@@ -228,7 +226,7 @@ function dt_removed_mailchimp_tag( $old_site ) {
                 ]
             ] ),
             "headers" => [
-                "Authorization" => "tags $api_key",
+                "Authorization" => "Bearer $api_key",
                 'Content-Type' => 'application/json; charset=utf-8'
             ],
             'data_format' => 'body',
