@@ -70,6 +70,10 @@ add_action( 'signup_blogform', function ( $errors ){
             <input id="dt_newsletter" type="checkbox" name="dt_newsletter" checked>
             <strong>Sign me up for Pray4Movement news.</strong>
         </label>
+        <label for="p4m_agreement">
+            <input id="p4m_agreement" type="checkbox" name="p4m_agreement" checked required>
+            <strong>I agree to use this prayer campaign tool in accordance with the vision and intent of Pray4Movement to mobilize extraordinary prayer for a specific people or place.</strong>
+        </label>
     </p>
     <?php
 } );
