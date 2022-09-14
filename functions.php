@@ -49,24 +49,28 @@ add_action( 'signup_blogform', function ( $errors ){
 
     wp_nonce_field( 'dt_extra_meta_info', 'dt_signup_blogform' );
     ?>
-  <label for="dt_champion_name">
-    What is your name?
-  </label>
-  <input type="text" id="dt_champion_name" name="dt_champion_name">
-  <label for="dt_prayer_site">
-    Do you have an existing prayer website? What is the link?
-  </label>
-  <input type="text" id="dt_prayer_site" name="dt_prayer_site">
-  <label for="dt_reason_for_subsite">
-    What is this prayer campaign for?
-  </label>
-  <input type="text" id="dt_reason_for_subsite" name="dt_reason_for_subsite">
-  <p>
-    <label for="dt_newsletter">
-      <input id="dt_newsletter" type="checkbox" name="dt_newsletter" checked>
-      <strong>Sign me up for Pray4Movement news.</strong>
+    <style>
+        #privacy { display: none}
+        .private-notice { color: #949494 }
+    </style>
+    <label for="dt_champion_name">
+        What is your name? <span class="private-notice">Answer is kept private.</span>
     </label>
-  </p>
+    <input type="text" id="dt_champion_name" name="dt_champion_name">
+    <label for="dt_prayer_site">
+        Do you have an existing prayer network? If so, what is the link? <span class="private-notice">Answer is kept private.</span>
+    </label>
+    <input type="text" id="dt_prayer_site" name="dt_prayer_site">
+    <label for="dt_reason_for_subsite">
+        What is your target location or people group? <span class="private-notice">Answer is kept private.</span>
+    </label>
+    <input type="text" id="dt_reason_for_subsite" name="dt_reason_for_subsite">
+    <p>
+        <label for="dt_newsletter">
+            <input id="dt_newsletter" type="checkbox" name="dt_newsletter" checked>
+            <strong>Sign me up for Pray4Movement news.</strong>
+        </label>
+    </p>
     <?php
 } );
 
