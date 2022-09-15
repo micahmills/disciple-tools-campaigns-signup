@@ -49,24 +49,68 @@ add_action( 'signup_blogform', function ( $errors ){
 
     wp_nonce_field( 'dt_extra_meta_info', 'dt_signup_blogform' );
     ?>
-  <label for="dt_champion_name">
-    What is your name?
-  </label>
-  <input type="text" id="dt_champion_name" name="dt_champion_name">
-  <label for="dt_prayer_site">
-    Do you have an existing prayer website? What is the link?
-  </label>
-  <input type="text" id="dt_prayer_site" name="dt_prayer_site">
-  <label for="dt_reason_for_subsite">
-    What is this prayer campaign for?
-  </label>
-  <input type="text" id="dt_reason_for_subsite" name="dt_reason_for_subsite">
-  <p>
-    <label for="dt_newsletter">
-      <input id="dt_newsletter" type="checkbox" name="dt_newsletter" checked>
-      <strong>Sign me up for Pray4Movement news.</strong>
+    <style>
+        #privacy { display: none}
+        .private-notice { color: #949494 }
+    </style>
+    <br>
+    <br>
+    <br>
+    <label for="dt_champion_name">
+        What is your name? <span class="private-notice">Answer is kept private.</span>
     </label>
-  </p>
+    <input type="text" id="dt_champion_name" name="dt_champion_name">
+    <label for="dt_prayer_site">
+        Do you have an existing prayer network? If so, what is the link? <span class="private-notice">Answer is kept private.</span>
+    </label>
+    <input type="text" id="dt_prayer_site" name="dt_prayer_site">
+    <label for="dt_reason_for_subsite">
+        What is your target location or people group? <span class="private-notice">Answer is kept private.</span>
+    </label>
+    <input type="text" id="dt_reason_for_subsite" name="dt_reason_for_subsite">
+    <p>
+        <label>Chose a Campaign Type:</label>
+            <?php
+            $wizard_types = apply_filters( 'dt_campaigns_wizard_types', [] );
+            if ( empty( $wizard_types ) ){
+                $wizard_types = [
+                    'ongoing-porch' => [
+                        'campaign_type' => 'ongoing',
+                        'porch' => 'ongoing-porch',
+                        'label' => '24/7 Ongoing Campaign',
+                    ],
+                    '24hour' => [
+                        'campaign_type' => '24hour',
+                        'porch' => 'generic-porch',
+                        'label' => '24/7 Campaign with a start and end date'
+                    ],
+                    'ramadan-porch' => [
+                        'campaign_type' => '24hour',
+                        'porch' => 'ramadan-porch',
+                        'label' => '24/7 Ramadan Template',
+                    ],
+                ];
+            }
+            foreach ( $wizard_types as $type => $type_value ): ?>
+                <label>
+                    <input type="radio" name="porch_type" value="<?php echo esc_html( $type ); ?>" required>
+                    <?php echo esc_html( $type_value['label'] ); ?>
+                </label>
+            <?php endforeach; ?>
+
+    </p>
+
+
+    <p>
+        <label for="dt_newsletter">
+            <input id="dt_newsletter" type="checkbox" name="dt_newsletter" checked>
+            <strong>Sign me up for Pray4Movement news.</strong>
+        </label>
+        <label for="p4m_agreement">
+            <input id="p4m_agreement" type="checkbox" name="p4m_agreement" required>
+            <strong>I agree to use this prayer campaign tool in accordance with the vision and intent of Pray4Movement to mobilize extraordinary prayer for a specific people or place.</strong>
+        </label>
+    </p>
     <?php
 } );
 
@@ -81,6 +125,9 @@ function dt_add_signup_meta( $meta ){
 
     if ( isset( $_POST["dt_newsletter"] ) ){
         $meta["dt_newsletter"] = 1;
+    }
+    if ( isset( $_POST["porch_type"] ) ){
+        $meta["porch_type"] = sanitize_text_field( wp_unslash( $_POST["porch_type"] ) );
     }
     if ( isset( $_POST["dt_champion_name"] ) ) {
         $meta["dt_champion_name"] = sanitize_text_field( wp_unslash( $_POST["dt_champion_name"] ) );
@@ -158,6 +205,9 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     ];
     $response = wp_remote_post( 'http://' . $domain . '/wp-json/dt-campaign/v1/contact/import?email=' . urlencode( $email ), $args );
 
+    if ( isset( $meta["porch_type"] ) ){
+        update_blog_option( $blog_id, "p4m_porch_type_to_set_up", $meta["porch_type"] );
+    }
     return;
 
 }, 10, 2 );
@@ -276,6 +326,10 @@ add_action( 'before_signup_form', function() : void {
         //phpcs:ignore
         $domain = substr( $domain, strlen( $needle ) );
     }
+
+    ?>
+    <p>Please choose a <strong>Site Domain</strong> and <strong>Site Title</strong> that describes your prayer focus. We recommend domains like pray4france, france-ramadan, france-lent, france247, etc. The Site Domain and Site Title will be publicly visible.</p>
+    <?php
 } );
 
 /**
