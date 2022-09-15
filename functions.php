@@ -1,8 +1,8 @@
 <?php
 
 global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
-$dt_campaign_signup_mailchimp_list_id = "4df6e5ea4e";
-$dt_campaign_signup_mailchimp_tag = "campaign_manager";
+$dt_campaign_signup_mailchimp_list_id = '4df6e5ea4e';
+$dt_campaign_signup_mailchimp_tag = 'campaign_manager';
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -29,7 +29,7 @@ add_action( 'wp_enqueue_scripts', function() {
 
 
 function dt_pcsu_signup_blog_notification_email_rename( $message, $domain, $path, $title, $user, $user_email, $key, $meta ) {
-    return str_replace( "blog", "site", $message );
+    return str_replace( 'blog', 'site', $message );
 }
 
 add_filter( 'wpmu_signup_blog_notification_email', 'dt_pcsu_signup_blog_notification_email_rename', 10, 8 );
@@ -119,24 +119,24 @@ add_action( 'signup_blogform', function ( $errors ){
 add_filter( 'add_signup_meta', 'dt_add_signup_meta' );
 function dt_add_signup_meta( $meta ){
 
-    if ( !isset( $_POST["dt_signup_blogform"] ) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST["dt_signup_blogform"] ) ), "dt_extra_meta_info" ) ) {
+    if ( !isset( $_POST['dt_signup_blogform'] ) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['dt_signup_blogform'] ) ), 'dt_extra_meta_info' ) ) {
         return;
     }
 
-    if ( isset( $_POST["dt_newsletter"] ) ){
-        $meta["dt_newsletter"] = 1;
+    if ( isset( $_POST['dt_newsletter'] ) ){
+        $meta['dt_newsletter'] = 1;
     }
-    if ( isset( $_POST["porch_type"] ) ){
-        $meta["porch_type"] = sanitize_text_field( wp_unslash( $_POST["porch_type"] ) );
+    if ( isset( $_POST['porch_type'] ) ){
+        $meta['porch_type'] = sanitize_text_field( wp_unslash( $_POST['porch_type'] ) );
     }
-    if ( isset( $_POST["dt_champion_name"] ) ) {
-        $meta["dt_champion_name"] = sanitize_text_field( wp_unslash( $_POST["dt_champion_name"] ) );
+    if ( isset( $_POST['dt_champion_name'] ) ) {
+        $meta['dt_champion_name'] = sanitize_text_field( wp_unslash( $_POST['dt_champion_name'] ) );
     }
-    if ( isset( $_POST["dt_prayer_site"] ) ) {
-        $meta["dt_prayer_site"] = sanitize_text_field( wp_unslash( $_POST["dt_prayer_site"] ) );
+    if ( isset( $_POST['dt_prayer_site'] ) ) {
+        $meta['dt_prayer_site'] = sanitize_text_field( wp_unslash( $_POST['dt_prayer_site'] ) );
     }
-    if ( isset( $_POST["dt_reason_for_subsite"] ) ) {
-        $meta["dt_reason_for_subsite"] = sanitize_text_field( wp_unslash( $_POST["dt_reason_for_subsite"] ) );
+    if ( isset( $_POST['dt_reason_for_subsite'] ) ) {
+        $meta['dt_reason_for_subsite'] = sanitize_text_field( wp_unslash( $_POST['dt_reason_for_subsite'] ) );
     }
 
     return $meta;
@@ -152,19 +152,19 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     global $dt_campaign_signup_mailchimp_tag;
     $domain = $new_site->domain;
     $blog_id = $new_site->blog_id;
-    $user_id = $args["user_id"];
-    $meta = $args["options"];
+    $user_id = $args['user_id'];
+    $meta = $args['options'];
 
-    if ( isset( $meta["dt_newsletter"] ) ){
+    if ( isset( $meta['dt_newsletter'] ) ){
         $tags = [ $dt_campaign_signup_mailchimp_tag ];
         add_user_to_mailchimp( $user_id, $tags );
     }
 
-    $token = get_option( "crm_link_token" );
-    $domain = get_option( "crm_link_domain" );
+    $token = get_option( 'crm_link_token' );
+    $domain = get_option( 'crm_link_domain' );
 
     if ( !$token || !$domain ) {
-        error_log( "token or domain missing in the DB at crm_link_token or crm_link_domain" );
+        error_log( 'token or domain missing in the DB at crm_link_token or crm_link_domain' );
         return;
     }
 
@@ -175,7 +175,7 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
         $user_id = get_current_user_id();
     }
 
-    $user = get_user_by( "ID", $user_id );
+    $user = get_user_by( 'ID', $user_id );
 
     if ( !$user ) {
         return;
@@ -189,12 +189,12 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
 
     $email = $user->user_email;
     $fields = [
-        "user_info" => [
-            "name" => $meta["dt_champion_name"],
+        'user_info' => [
+            'name' => $meta['dt_champion_name'],
         ],
-        "instance_links" => $blog->domain,
-        "dt_prayer_site" => $meta["dt_prayer_site"],
-        "dt_reason_for_subsite" => $meta["dt_reason_for_subsite"],
+        'instance_links' => $blog->domain,
+        'dt_prayer_site' => $meta['dt_prayer_site'],
+        'dt_reason_for_subsite' => $meta['dt_reason_for_subsite'],
     ];
     $args = [
         'method' => 'POST',
@@ -205,8 +205,8 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     ];
     $response = wp_remote_post( 'http://' . $domain . '/wp-json/dt-campaign/v1/contact/import?email=' . urlencode( $email ), $args );
 
-    if ( isset( $meta["porch_type"] ) ){
-        update_blog_option( $blog_id, "p4m_porch_type_to_set_up", $meta["porch_type"] );
+    if ( isset( $meta['porch_type'] ) ){
+        update_blog_option( $blog_id, 'p4m_porch_type_to_set_up', $meta['porch_type'] );
     }
     return;
 
@@ -219,24 +219,24 @@ function add_user_to_mailchimp( $user_id, $tags = [] ){
         $user_id = get_current_user_id();
     }
 
-    $api_key = get_site_option( "dt_mailchimp_api_key", null );
+    $api_key = get_site_option( 'dt_mailchimp_api_key', null );
 
-    $user = get_user_by( "ID", $user_id );
+    $user = get_user_by( 'ID', $user_id );
 
     if ( $user && $api_key ){
         $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/";
         $response = wp_remote_post( $url, [
-            "body" => json_encode([
-                "email_address" => $user->user_email,
-                "status" => "subscribed",
-                "merge_fields" => [
-                    "FNAME" => $user->first_name ?? "",
-                    "LNAME" => $user->last_name ?? ""
+            'body' => json_encode([
+                'email_address' => $user->user_email,
+                'status' => 'subscribed',
+                'merge_fields' => [
+                    'FNAME' => $user->first_name ?? '',
+                    'LNAME' => $user->last_name ?? ''
                 ],
-                "tags" => $tags
+                'tags' => $tags
             ]),
-            "headers" => [
-                "Authorization" => "Bearer $api_key",
+            'headers' => [
+                'Authorization' => "Bearer $api_key",
                 'Content-Type' => 'application/json; charset=utf-8'
             ],
             'data_format' => 'body',
@@ -258,25 +258,25 @@ add_action( 'wp_uninitialize_site', 'dt_removed_mailchimp_tag', 1, 1 );
 function dt_removed_mailchimp_tag( $old_site ) {
     global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
 
-    $api_key = get_site_option( "dt_mailchimp_api_key", null );
+    $api_key = get_site_option( 'dt_mailchimp_api_key', null );
 
-    $admin_email = get_blog_option( $old_site->id, "admin_email" );
+    $admin_email = get_blog_option( $old_site->id, 'admin_email' );
 
 
     if ( $admin_email && $api_key ){
         $email_hash = md5( strtolower( $admin_email ) );
         $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
         $response = wp_remote_post( $url, [
-            "body" => json_encode( [
-                "tags" => [
+            'body' => json_encode( [
+                'tags' => [
                     [
                         'name' => $dt_campaign_signup_mailchimp_tag,
                         'status' => 'inactive',
                     ],
                 ]
             ] ),
-            "headers" => [
-                "Authorization" => "Bearer $api_key",
+            'headers' => [
+                'Authorization' => "Bearer $api_key",
                 'Content-Type' => 'application/json; charset=utf-8'
             ],
             'data_format' => 'body',
@@ -301,10 +301,10 @@ add_filter( 'wpmu_validate_blog_signup', function( array $result ) : array {
 
     /* check domain, blogname and blog title for key words */
     foreach ( $bad_words as $key_word ) {
-        if ( strpos( $result["domain"], $key_word ) !== false ||
-        strpos( $result["blog_title"], $key_word ) !== false ||
-        strpos( $result["blogname"], $key_word ) !== false ) {
-            $result["errors"] = new WP_Error( "unexpected_key_word", "There is a banned keyword in the domain or blog title" );
+        if ( strpos( $result['domain'], $key_word ) !== false ||
+        strpos( $result['blog_title'], $key_word ) !== false ||
+        strpos( $result['blogname'], $key_word ) !== false ) {
+            $result['errors'] = new WP_Error( 'unexpected_key_word', 'There is a banned keyword in the domain or blog title' );
         }
     }
 
@@ -320,7 +320,7 @@ add_action( 'before_signup_form', function() : void {
 
     $dt_old_domain = $domain;
 
-    $needle = "campaigns.";
+    $needle = 'campaigns.';
 
     if ( stripos( $domain, $needle ) === 0 ) {
         //phpcs:ignore
@@ -340,7 +340,7 @@ add_action( 'before_signup_form', function() : void {
  */
 add_filter( 'get_network', function( \WP_Network $_network ) : \WP_Network {
     global $domain;
-    if ( isset( $_SERVER["REQUEST_URI"] ) && $_SERVER["REQUEST_URI"] === "/wp-signup.php" ) {
+    if ( isset( $_SERVER['REQUEST_URI'] ) && $_SERVER['REQUEST_URI'] === '/wp-signup.php' ) {
         $_network->domain = $domain;
     }
     return $_network;
