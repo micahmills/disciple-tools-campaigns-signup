@@ -7,7 +7,7 @@
         © Copyright
         <script>document.write(new Date().getFullYear())</script>
         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-        <a class="lighter-grey" href="https://disciple.tools">Disciple.Tools</a>
+        <a class="lighter-grey" href="https://pray4movement.org">Pray4movement.org</a>
         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
         All rights reserved
         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
