@@ -71,25 +71,26 @@ add_action( 'signup_blogform', function ( $errors ){
     <p>
         <label>Chose a Campaign Type:</label>
             <?php
-            // @todo enable this
-            // $wizard_types = apply_filters( 'dt_campaigns_wizard_types', [] );
-            $wizard_types = [
-                'ongoing-porch' => [
-                    'campaign_type' => 'ongoing',
-                    'porch' => 'ongoing-porch',
-                    'label' => '24/7 Ongoing Campaign',
-                ],
-                '24hour' => [
-                    'campaign_type' => '24hour',
-                    'porch' => 'generic-porch',
-                    'label' => '24/7 Campaign with a start and end date'
-                ],
-                'ramadan-porch' => [
-                    'campaign_type' => '24hour',
-                    'porch' => 'ramadan-porch',
-                    'label' => '24/7 Ramadan Template',
-                ],
-            ];
+            $wizard_types = apply_filters( 'dt_campaigns_wizard_types', [] );
+            if ( empty( $wizard_types ) ){
+                $wizard_types = [
+                    'ongoing-porch' => [
+                        'campaign_type' => 'ongoing',
+                        'porch' => 'ongoing-porch',
+                        'label' => '24/7 Ongoing Campaign',
+                    ],
+                    '24hour' => [
+                        'campaign_type' => '24hour',
+                        'porch' => 'generic-porch',
+                        'label' => '24/7 Campaign with a start and end date'
+                    ],
+                    'ramadan-porch' => [
+                        'campaign_type' => '24hour',
+                        'porch' => 'ramadan-porch',
+                        'label' => '24/7 Ramadan Template',
+                    ],
+                ];
+            }
             foreach ( $wizard_types as $type => $type_value ): ?>
                 <label>
                     <input type="radio" name="porch_type" value="<?php echo esc_html( $type ); ?>" required>
