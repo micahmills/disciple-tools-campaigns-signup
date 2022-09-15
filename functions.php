@@ -327,9 +327,9 @@ add_action( 'before_signup_form', function() : void {
         $domain = substr( $domain, strlen( $needle ) );
     }
 
-    ?>
-    <p>Please choose a <strong>Site Domain</strong> and <strong>Site Title</strong> that describes your prayer focus. We recommend domains like pray4france, france-ramadan, france-lent, france247, etc. The Site Domain and Site Title will be publicly visible.</p>
-    <?php
+    if ( isset( $_POST['stage'] ) && $_POST['stage'] === 'validate-user-signup' ): //phpcs:ignore ?>
+        <p>Please choose a <strong>Site Domain</strong> and <strong>Site Title</strong> that describes your prayer focus. We recommend domains like pray4france, france-ramadan, france-lent, france247, etc. The Site Domain and Site Title will be publicly visible.</p>
+    <?php endif;
 } );
 
 /**
