@@ -362,3 +362,52 @@ add_action( 'after_signup_form', function() : void {
     //phpcs:ignore
     $domain = $dt_old_domain;
 } );
+
+
+add_action( 'get_footer', function ( $name, $args ){
+    if ( $name === 'wp-activate' ){
+        ?>
+
+        <style>
+            #p4m_getting_started {
+                font-size: 2rem;
+            }
+        </style>
+
+        <div id="p4m_getting_started">
+            <h1>Getting Started</h1>
+            <h3>1. View Your new Site:</h3>
+            <a id="instance_button" class="button bg-primary" href="" target="_blank">View Your Site <img style="width: 25px; vertical-align: text-bottom; filter:invert(1)" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/open-link.svg' )?>"></a>
+
+            <br><br>
+            <h3>2. Open Admin Settings</h3>
+
+            <p>Scroll to the the bottom of the page and click:</p>
+            <img style="width: initial" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/page_settings.png' )?>">
+
+            <br><br>
+
+            <h3>3. Log In</h3>
+            <img style="width: initial" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/login.png' )?>">
+            <br><br>
+
+            <h3>4. Customize Settings</h3>
+            <img style="width: initial" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/settings.png' )?>">
+
+            <br><br>
+            <h3>5. Get a hand from the Documentation</h3>
+            <a href="https://pray4movement.org/docs/overview/" target="_blank">Prayer Campaigns Documentation</a>
+        </div>
+
+        <script>
+            let alinks = document.querySelectorAll('#signup-content .view a')
+            let instance_link = alinks[0]?.href
+            if ( instance_link ){
+                fetch(instance_link) // call the D.T instance so it can start running its migrations
+                document.getElementById('instance_button').href = instance_link; // set the view site button
+            }
+        </script>
+
+        <?php
+    }
+}, 10, 2 );
