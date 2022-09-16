@@ -327,10 +327,16 @@ add_action( 'before_signup_form', function() : void {
         $domain = substr( $domain, strlen( $needle ) );
     }
 
-    ?>
-    <p>Please choose a <strong>Site Domain</strong> and <strong>Site Title</strong> that describes your prayer focus. We recommend domains like pray4france, france-ramadan, france-lent, france247, etc. The Site Domain and Site Title will be publicly visible.</p>
-    <?php
 } );
+
+add_action( 'signup_hidden_fields', function ( $stage ){
+    if ( $stage === 'validate-site' ) :?>
+        <p>Please choose a <strong>Site Domain</strong> and <strong>Site Title</strong> that describes your prayer
+            focus. We recommend domains like pray4france, france-ramadan, france-lent, france247, etc. The Site Domain
+            and Site Title will be publicly visible.</p>
+    <?php endif;
+} );
+
 
 /**
  * Fires after a network is retrieved.
