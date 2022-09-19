@@ -69,7 +69,7 @@ add_action( 'signup_blogform', function ( $errors ){
     </label>
     <input type="text" id="dt_reason_for_subsite" name="dt_reason_for_subsite">
     <p>
-        <label>Chose a Campaign Type:</label>
+        <label>Choose a <a target="_blank" href="https://pray4movement.org/docs/campaign-types/">Campaign Type</a>:</label>
             <?php
             $wizard_types = apply_filters( 'dt_campaigns_wizard_types', [] );
             if ( empty( $wizard_types ) ){
