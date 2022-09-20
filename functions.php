@@ -108,7 +108,13 @@ add_action( 'signup_blogform', function ( $errors ){
         </label>
         <label for="p4m_agreement">
             <input id="p4m_agreement" type="checkbox" name="p4m_agreement" required>
-            <strong>I agree to use this prayer campaign tool in accordance with the vision and intent of Pray4Movement to mobilize extraordinary prayer for a specific people or place.</strong>
+            <span>
+                I agree to use this prayer campaign tool in accordance with the <a href="https://pray4movement.org/about/" target="_blank">vision and intent</a> of Pray4Movement to mobilize extraordinary prayer for a specific people or place.
+            </span>
+        </label>
+        <label for="p4m_list_agreement">
+            <input id="p4m_list_agreement" type="checkbox" name="p4m_list_agreement" required>
+                I agree that my prayer campaign can be listed on Pray4Movements.org
         </label>
     </p>
     <?php
