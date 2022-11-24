@@ -212,8 +212,8 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     $response = wp_remote_post( 'http://' . $domain . '/wp-json/dt-campaign/v1/contact/import?email=' . urlencode( $email ), $args );
     if ( !is_wp_error( $response ) ){
         $result = json_decode( wp_remote_retrieve_body( $response ), true );
-        if ( !empty( $result['ID'] ) ){
-            update_blog_option( $blog_id, 'p4m_linked_crm_contact', $result['ID'] );
+        if ( !empty( $result['contact_id'] ) ){
+            update_blog_option( $blog_id, 'p4m_linked_crm_contact', $result['contact_id'] );
         }
     }
 
@@ -334,7 +334,7 @@ add_action( 'before_signup_form', function() : void {
 
     $needle = 'campaigns.';
 
-    if ( stripos( $domain, $needle ) === 0 ) {
+    if ( stripos( $domain, $needle ) === 0 && strpos( $domain, 'pray4movement.org' ) !== false ){
         //phpcs:ignore
         $domain = substr( $domain, strlen( $needle ) );
     }
