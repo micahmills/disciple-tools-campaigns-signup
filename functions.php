@@ -38,7 +38,7 @@ add_action( 'signup_extra_fields', function ( $errors ){
     ?>
   <p>
     <span style="text-decoration: underline;">Already have an account?</span> Sign in instead to create a new prayer campaign site:
-    <input type="button"
+    <input type="button" class="button" style="border:1px black solid; color: black"
            onclick="location.href='wp-login.php?redirect_to=<?php echo esc_html( urlencode( site_url( 'wp-signup.php' ) ) ); ?>';"
            value="Sign in"/>
   </p>

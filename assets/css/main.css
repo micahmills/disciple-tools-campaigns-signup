@@ -210,6 +210,10 @@ button {
     font-size: 1.8rem;
 }
 
+#signup-content .signup-options {
+    display: none;
+}
+
 #signup-content input#signupuser {
     display: none;
 }
