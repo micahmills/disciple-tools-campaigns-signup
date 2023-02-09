@@ -1,8 +1,10 @@
 <?php
 
-global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
+global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag;
 $dt_campaign_signup_mailchimp_list_id = '4df6e5ea4e';
 $dt_campaign_signup_mailchimp_tag = 'campaign_manager';
+$dt_campaign_signup_mailchimp_news_tag = 'news';
+$dt_campaign_signup_mailchimp_ramadan_tag = 'ramadan_champion';
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -155,16 +157,20 @@ function dt_add_signup_meta( $meta ){
  * @param array    $args     Arguments for the initialization.
  */
 add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : void {
-    global $dt_campaign_signup_mailchimp_tag;
+    global $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag;
     $domain = $new_site->domain;
     $blog_id = $new_site->blog_id;
     $user_id = $args['user_id'];
     $meta = $args['options'];
 
+    $tags = [ $dt_campaign_signup_mailchimp_tag ];
     if ( isset( $meta['dt_newsletter'] ) ){
-        $tags = [ $dt_campaign_signup_mailchimp_tag ];
-        add_user_to_mailchimp( $user_id, $tags );
+        $tags[] = $dt_campaign_signup_mailchimp_news_tag;
     }
+    if ( isset( $meta['porch_type'] ) && $meta['porch_type'] === 'ramadan-porch' ){
+        $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag;
+    }
+    add_user_to_mailchimp( $user_id, $tags, $name = $meta['dt_champion_name'] ?? '' );
 
     $token = get_option( 'crm_link_token' );
     $domain = get_option( 'crm_link_domain' );
@@ -224,7 +230,7 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
 
 }, 10, 2 );
 
-function add_user_to_mailchimp( $user_id, $tags = [] ){
+function add_user_to_mailchimp( $user_id, $tags = [], $name = '' ){
     global $dt_campaign_signup_mailchimp_list_id;
 
     if ( !$user_id ){
@@ -242,7 +248,7 @@ function add_user_to_mailchimp( $user_id, $tags = [] ){
                 'email_address' => $user->user_email,
                 'status' => 'subscribed',
                 'merge_fields' => [
-                    'FNAME' => $user->first_name ?? '',
+                    'FNAME' => !empty( $name ) ? $name : ( $user->first_name ?? '' ),
                     'LNAME' => $user->last_name ?? ''
                 ],
                 'tags' => $tags
