@@ -164,11 +164,14 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     $meta = $args['options'];
 
     $tags = [ $dt_campaign_signup_mailchimp_tag ];
+    $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_tag ];
     if ( isset( $meta['dt_newsletter'] ) ){
         $tags[] = $dt_campaign_signup_mailchimp_news_tag;
+        $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_news_tag ];
     }
     if ( isset( $meta['porch_type'] ) && $meta['porch_type'] === 'ramadan-porch' ){
         $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag;
+        $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag ];
     }
     add_user_to_mailchimp( $user_id, $tags, $name = $meta['dt_champion_name'] ?? '' );
 
@@ -204,9 +207,10 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
         'user_info' => [
             'name' => $meta['dt_champion_name'],
         ],
-        'instance_links' => $blog->domain,
+        'instance_links' => $blog->siteurl,
         'dt_prayer_site' => $meta['dt_prayer_site'],
         'dt_reason_for_subsite' => $meta['dt_reason_for_subsite'],
+        'tags' => $dt_tags,
     ];
     $args = [
         'method' => 'POST',
