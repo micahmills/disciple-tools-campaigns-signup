@@ -5,6 +5,7 @@ $dt_campaign_signup_mailchimp_list_id = '4df6e5ea4e';
 $dt_campaign_signup_mailchimp_tag = 'campaign_manager';
 $dt_campaign_signup_mailchimp_news_tag = 'news';
 $dt_campaign_signup_mailchimp_ramadan_tag = 'ramadan_champion';
+$dt_campaign_signup_mailchimp_ramadan_tag_2023 = 'R2023 champion';
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -157,7 +158,7 @@ function dt_add_signup_meta( $meta ){
  * @param array    $args     Arguments for the initialization.
  */
 add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : void {
-    global $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag;
+    global $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag, $dt_campaign_signup_mailchimp_ramadan_tag_2023;
     $domain = $new_site->domain;
     $blog_id = $new_site->blog_id;
     $user_id = $args['user_id'];
@@ -171,7 +172,9 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
     }
     if ( isset( $meta['porch_type'] ) && $meta['porch_type'] === 'ramadan-porch' ){
         $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag;
+        $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag_2023;
         $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag ];
+        $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag_2023 ];
     }
     add_user_to_mailchimp( $user_id, $tags, $name = $meta['dt_champion_name'] ?? '' );
 
