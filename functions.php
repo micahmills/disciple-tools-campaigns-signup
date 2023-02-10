@@ -263,9 +263,31 @@ function add_user_to_mailchimp( $user_id, $tags = [], $name = '' ){
             ],
             'data_format' => 'body',
         ]);
-
         if ( is_wp_error( $response ) ){
             return;
+        }
+        $response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+        if ( isset( $response_body['status'] ) && $response_body['status'] === 400 ){
+            //update mailchimp with tags
+            $update_tags = [];
+            foreach ( $tags as $tag ){
+                $update_tags[] = [
+                    'name' => $tag,
+                    'status' => 'active'
+                ];
+            }
+            $email_hash = md5( strtolower( $user->user_email ) );
+            $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
+            $update_tags = wp_remote_post( $url, [
+                'body' => json_encode([
+                    'tags' => $update_tags
+                ]),
+                'headers' => [
+                    'Authorization' => "Bearer $api_key",
+                    'Content-Type' => 'application/json; charset=utf-8'
+                ],
+                'data_format' => 'body',
+            ]);
         }
     }
 }
