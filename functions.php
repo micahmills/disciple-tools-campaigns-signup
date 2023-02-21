@@ -120,6 +120,13 @@ add_action( 'signup_blogform', function ( $errors ){
                 I agree that my prayer campaign can be listed on Pray4Movements.org
         </label>
     </p>
+
+
+    // remove the blog name field so the user put in the campaign name
+    <script type="text/javascript">
+        document.getElementById('blogname').value = '';
+    </script>
+
     <?php
 } );
 
