@@ -122,7 +122,7 @@ add_action( 'signup_blogform', function ( $errors ){
     </p>
 
 
-    // remove the blog name field so the user put in the campaign name
+    <!--remove the blog name field so the user put in the campaign name-->
     <script type="text/javascript">
         document.getElementById('blogname').value = '';
     </script>
