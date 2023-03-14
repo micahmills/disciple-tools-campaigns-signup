@@ -1,11 +1,11 @@
 <?php
 
-global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag;
-$dt_campaign_signup_mailchimp_list_id = '4df6e5ea4e';
-$dt_campaign_signup_mailchimp_tag = 'campaign_manager';
-$dt_campaign_signup_mailchimp_news_tag = 'news';
-$dt_campaign_signup_mailchimp_ramadan_tag = 'ramadan_champion';
-$dt_campaign_signup_mailchimp_ramadan_tag_2023 = 'R2023 champion';
+// global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag;
+// $dt_campaign_signup_mailchimp_list_id = '4df6e5ea4e';
+// $dt_campaign_signup_mailchimp_tag = 'campaign_manager';
+// $dt_campaign_signup_mailchimp_news_tag = 'news';
+// $dt_campaign_signup_mailchimp_ramadan_tag = 'ramadan_champion';
+// $dt_campaign_signup_mailchimp_ramadan_tag_2023 = 'R2023 champion';
 
 /**
  * Prints scripts or data in the head tag on the front end.
@@ -56,24 +56,18 @@ add_action( 'signup_blogform', function ( $errors ){
         #privacy { display: none}
         .private-notice { color: #949494 }
     </style>
-    <br>
-    <br>
-    <br>
-    <label for="dt_champion_name">
-        What is your name? <span class="private-notice">Answer is kept private.</span>
-    </label>
-    <input type="text" id="dt_champion_name" name="dt_champion_name">
-    <label for="dt_prayer_site">
-        Do you have an existing prayer network? If so, what is the link? <span class="private-notice">Answer is kept private.</span>
-    </label>
-    <input type="text" id="dt_prayer_site" name="dt_prayer_site">
-    <label for="dt_reason_for_subsite">
-        What is your target location or people group? <span class="private-notice">Answer is kept private.</span>
-    </label>
-    <input type="text" id="dt_reason_for_subsite" name="dt_reason_for_subsite">
     <p>
         <label>Choose a <a target="_blank" href="https://pray4movement.org/docs/campaign-types/">Campaign Type</a>:</label>
             <?php
+            function add_de_campaign_type( $wizard_types ){
+                $wizard_types['de-porch'] = [
+                    'campaign_type' => '24hour',
+                    'porch' => 'de-porch',
+                    'label' => '24/7 Digital Engagement Template',
+                ];
+                return $wizard_types;
+            }
+            add_filter( 'dt_campaigns_wizard_types', 'add_de_campaign_type' );
             $wizard_types = apply_filters( 'dt_campaigns_wizard_types', [] );
             if ( empty( $wizard_types ) ){
                 $wizard_types = [
@@ -85,12 +79,17 @@ add_action( 'signup_blogform', function ( $errors ){
                     '24hour' => [
                         'campaign_type' => '24hour',
                         'porch' => 'generic-porch',
-                        'label' => '24/7 Campaign with a start and end date'
+                        'label' => '24/7 Custom Campaign with a start and end date'
                     ],
                     'ramadan-porch' => [
                         'campaign_type' => '24hour',
                         'porch' => 'ramadan-porch',
-                        'label' => '24/7 Ramadan Template',
+                        'label' => '24/7 DE Template',
+                    ],
+                    'de-porch' => [
+                        'campaign_type' => '24hour',
+                        'porch' => 'de-porch',
+                        'label' => '24/7 Digital Engagement Template',
                     ],
                 ];
             }
@@ -102,25 +101,6 @@ add_action( 'signup_blogform', function ( $errors ){
             <?php endforeach; ?>
 
     </p>
-
-
-    <p>
-        <label for="dt_newsletter">
-            <input id="dt_newsletter" type="checkbox" name="dt_newsletter" checked>
-            <strong>Sign me up for Pray4Movement news.</strong>
-        </label>
-        <label for="p4m_agreement">
-            <input id="p4m_agreement" type="checkbox" name="p4m_agreement" required>
-            <span>
-                I agree to use this prayer campaign tool in accordance with the <a href="https://pray4movement.org/about/" target="_blank">vision and intent</a> of Pray4Movement to mobilize extraordinary prayer for a specific people or place.
-            </span>
-        </label>
-        <label for="p4m_list_agreement">
-            <input id="p4m_list_agreement" type="checkbox" name="p4m_list_agreement" required>
-                I agree that my prayer campaign can be listed on Pray4Movements.org
-        </label>
-    </p>
-
 
     <!--remove the blog name field so the user put in the campaign name-->
     <script type="text/javascript">
@@ -165,25 +145,25 @@ function dt_add_signup_meta( $meta ){
  * @param array    $args     Arguments for the initialization.
  */
 add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : void {
-    global $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag, $dt_campaign_signup_mailchimp_ramadan_tag_2023;
+    // global $dt_campaign_signup_mailchimp_tag, $dt_campaign_signup_mailchimp_news_tag, $dt_campaign_signup_mailchimp_ramadan_tag, $dt_campaign_signup_mailchimp_ramadan_tag_2023;
     $domain = $new_site->domain;
     $blog_id = $new_site->blog_id;
     $user_id = $args['user_id'];
     $meta = $args['options'];
 
-    $tags = [ $dt_campaign_signup_mailchimp_tag ];
-    $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_tag ];
-    if ( isset( $meta['dt_newsletter'] ) ){
-        $tags[] = $dt_campaign_signup_mailchimp_news_tag;
-        $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_news_tag ];
-    }
-    if ( isset( $meta['porch_type'] ) && $meta['porch_type'] === 'ramadan-porch' ){
-        $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag;
-        $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag_2023;
-        $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag ];
-        $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag_2023 ];
-    }
-    add_user_to_mailchimp( $user_id, $tags, $name = $meta['dt_champion_name'] ?? '' );
+    // $tags = [ $dt_campaign_signup_mailchimp_tag ];
+    // $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_tag ];
+    // if ( isset( $meta['dt_newsletter'] ) ){
+    //     $tags[] = $dt_campaign_signup_mailchimp_news_tag;
+    //     $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_news_tag ];
+    // }
+    // if ( isset( $meta['porch_type'] ) && $meta['porch_type'] === 'ramadan-porch' ){
+    //     $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag;
+    //     $tags[] = $dt_campaign_signup_mailchimp_ramadan_tag_2023;
+    //     $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag ];
+    //     $dt_tags['values'][] = [ 'value' => 'P4M_MC_' . $dt_campaign_signup_mailchimp_ramadan_tag_2023 ];
+    // }
+    // add_user_to_mailchimp( $user_id, $tags, $name = $meta['dt_champion_name'] ?? '' );
 
     $token = get_option( 'crm_link_token' );
     $domain = get_option( 'crm_link_domain' );
@@ -244,63 +224,63 @@ add_action( 'wp_initialize_site', function( \WP_Site $new_site, array $args ) : 
 
 }, 10, 2 );
 
-function add_user_to_mailchimp( $user_id, $tags = [], $name = '' ){
-    global $dt_campaign_signup_mailchimp_list_id;
+// function add_user_to_mailchimp( $user_id, $tags = [], $name = '' ){
+//     global $dt_campaign_signup_mailchimp_list_id;
 
-    if ( !$user_id ){
-        $user_id = get_current_user_id();
-    }
+//     if ( !$user_id ){
+//         $user_id = get_current_user_id();
+//     }
 
-    $api_key = get_site_option( 'dt_mailchimp_api_key', null );
+//     $api_key = get_site_option( 'dt_mailchimp_api_key', null );
 
-    $user = get_user_by( 'ID', $user_id );
+//     $user = get_user_by( 'ID', $user_id );
 
-    if ( $user && $api_key ){
-        $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/";
-        $response = wp_remote_post( $url, [
-            'body' => json_encode([
-                'email_address' => $user->user_email,
-                'status' => 'subscribed',
-                'merge_fields' => [
-                    'FNAME' => !empty( $name ) ? $name : ( $user->first_name ?? '' ),
-                    'LNAME' => $user->last_name ?? ''
-                ],
-                'tags' => $tags
-            ]),
-            'headers' => [
-                'Authorization' => "Bearer $api_key",
-                'Content-Type' => 'application/json; charset=utf-8'
-            ],
-            'data_format' => 'body',
-        ]);
-        if ( is_wp_error( $response ) ){
-            return;
-        }
-        $response_body = json_decode( wp_remote_retrieve_body( $response ), true );
-        if ( isset( $response_body['status'] ) && $response_body['status'] === 400 ){
-            //update mailchimp with tags
-            $update_tags = [];
-            foreach ( $tags as $tag ){
-                $update_tags[] = [
-                    'name' => $tag,
-                    'status' => 'active'
-                ];
-            }
-            $email_hash = md5( strtolower( $user->user_email ) );
-            $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
-            $update_tags = wp_remote_post( $url, [
-                'body' => json_encode([
-                    'tags' => $update_tags
-                ]),
-                'headers' => [
-                    'Authorization' => "Bearer $api_key",
-                    'Content-Type' => 'application/json; charset=utf-8'
-                ],
-                'data_format' => 'body',
-            ]);
-        }
-    }
-}
+//     if ( $user && $api_key ){
+//         $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/";
+//         $response = wp_remote_post( $url, [
+//             'body' => json_encode([
+//                 'email_address' => $user->user_email,
+//                 'status' => 'subscribed',
+//                 'merge_fields' => [
+//                     'FNAME' => !empty( $name ) ? $name : ( $user->first_name ?? '' ),
+//                     'LNAME' => $user->last_name ?? ''
+//                 ],
+//                 'tags' => $tags
+//             ]),
+//             'headers' => [
+//                 'Authorization' => "Bearer $api_key",
+//                 'Content-Type' => 'application/json; charset=utf-8'
+//             ],
+//             'data_format' => 'body',
+//         ]);
+//         if ( is_wp_error( $response ) ){
+//             return;
+//         }
+//         $response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+//         if ( isset( $response_body['status'] ) && $response_body['status'] === 400 ){
+//             //update mailchimp with tags
+//             $update_tags = [];
+//             foreach ( $tags as $tag ){
+//                 $update_tags[] = [
+//                     'name' => $tag,
+//                     'status' => 'active'
+//                 ];
+//             }
+//             $email_hash = md5( strtolower( $user->user_email ) );
+//             $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
+//             $update_tags = wp_remote_post( $url, [
+//                 'body' => json_encode([
+//                     'tags' => $update_tags
+//                 ]),
+//                 'headers' => [
+//                     'Authorization' => "Bearer $api_key",
+//                     'Content-Type' => 'application/json; charset=utf-8'
+//                 ],
+//                 'data_format' => 'body',
+//             ]);
+//         }
+//     }
+// }
 
 /**
  * Cleanup mailchimp when deleting site.
@@ -308,44 +288,42 @@ function add_user_to_mailchimp( $user_id, $tags = [], $name = '' ){
  * @param $blog_id
  * @param $drop
  */
-add_action( 'wp_uninitialize_site', 'dt_removed_mailchimp_tag', 1, 1 );
-function dt_removed_mailchimp_tag( $old_site ) {
-    global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
+// add_action( 'wp_uninitialize_site', 'dt_removed_mailchimp_tag', 1, 1 );
+// function dt_removed_mailchimp_tag( $old_site ) {
+//     global $dt_campaign_signup_mailchimp_list_id, $dt_campaign_signup_mailchimp_tag;
 
-    $api_key = get_site_option( 'dt_mailchimp_api_key', null );
+//     $api_key = get_site_option( 'dt_mailchimp_api_key', null );
 
-    $admin_email = get_blog_option( $old_site->id, 'admin_email' );
+//     $admin_email = get_blog_option( $old_site->id, 'admin_email' );
 
 
-    if ( $admin_email && $api_key ){
-        $email_hash = md5( strtolower( $admin_email ) );
-        $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
-        $response = wp_remote_post( $url, [
-            'body' => json_encode( [
-                'tags' => [
-                    [
-                        'name' => $dt_campaign_signup_mailchimp_tag,
-                        'status' => 'inactive',
-                    ],
-                ]
-            ] ),
-            'headers' => [
-                'Authorization' => "Bearer $api_key",
-                'Content-Type' => 'application/json; charset=utf-8'
-            ],
-            'data_format' => 'body',
-        ] );
-    }
+//     if ( $admin_email && $api_key ){
+//         $email_hash = md5( strtolower( $admin_email ) );
+//         $url = "https://us14.api.mailchimp.com/3.0/lists/$dt_campaign_signup_mailchimp_list_id/members/$email_hash/tags";
+//         $response = wp_remote_post( $url, [
+//             'body' => json_encode( [
+//                 'tags' => [
+//                     [
+//                         'name' => $dt_campaign_signup_mailchimp_tag,
+//                         'status' => 'inactive',
+//                     ],
+//                 ]
+//             ] ),
+//             'headers' => [
+//                 'Authorization' => "Bearer $api_key",
+//                 'Content-Type' => 'application/json; charset=utf-8'
+//             ],
+//             'data_format' => 'body',
+//         ] );
+//     }
 
-}
+// }
 
 /**
  * Filters site details and error messages following registration.
  *
- * @param array $result { Array of domain, path, blog name, blog title, user and error messages. @type string         $domain     Domain for the site. @type string         $path       Path for the site. Used in subdirectory installations. @type string         $blogname   The unique site name (slug). @type string         $blog_title Blog title. @type string|WP_User $user       By default, an empty string. A user object if provided. @type WP_Error       $errors     WP_Error containing any errors found.
-}
- * @return array { Array of domain, path, blog name, blog title, user and error messages. @type string         $domain     Domain for the site. @type string         $path       Path for the site. Used in subdirectory installations. @type string         $blogname   The unique site name (slug). @type string         $blog_title Blog title. @type string|WP_User $user       By default, an empty string. A user object if provided. @type WP_Error       $errors     WP_Error containing any errors found.
-}
+ * @param array $result { Array of domain, path, blog name, blog title, user and error messages. @type string         $domain     Domain for the site. @type string         $path       Path for the site. Used in subdirectory installations. @type string         $blogname   The unique site name (slug). @type string         $blog_title Blog title. @type string|WP_User $user       By default, an empty string. A user object if provided. @type WP_Error       $errors     WP_Error containing any errors found. }
+ * @return array { Array of domain, path, blog name, blog title, user and error messages. @type string         $domain     Domain for the site. @type string         $path       Path for the site. Used in subdirectory installations. @type string         $blogname   The unique site name (slug). @type string         $blog_title Blog title. @type string|WP_User $user       By default, an empty string. A user object if provided. @type WP_Error       $errors     WP_Error containing any errors found. }
  */
 add_filter( 'wpmu_validate_blog_signup', function( array $result ) : array {
 
